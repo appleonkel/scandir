@@ -25,6 +25,7 @@ from stat import S_IFDIR, S_IFLNK, S_IFREG
 import collections
 import os
 import sys
+from backports.os import fsdecode
 
 try:
     import _scandir
@@ -560,7 +561,7 @@ elif sys.platform.startswith(('linux', 'darwin', 'sunos5')) or 'bsd' in sys.plat
                     name = entry.d_name
                     if name not in (b'.', b'..'):
                         if not is_bytes:
-                            name = name.decode(file_system_encoding)
+                            name = fsdecode(name)
                         yield PosixDirEntry(path, name, entry.d_type, entry.d_ino)
             finally:
                 if closedir(dir_p):
